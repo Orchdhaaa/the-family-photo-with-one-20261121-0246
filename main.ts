@@ -11,4 +11,9 @@ const here = dirname(fileURLToPath(import.meta.url));
 const outDir = process.env.MAKEFUN_OUTPUT_DIR || "/output";
 mkdirSync(outDir, { recursive: true });
 const bytes = readFileSync(join(here, "entry.png"));
-writeFileSync(join(outDir, "entry.png"), bytes);
+const outPath = join(outDir, "entry.png");
+writeFileSync(outPath, bytes);
+const written = readFileSync(outPath);
+if (written.length !== bytes.length) {
+  throw new Error(`output byte length mismatch: wrote ${written.length}, expected ${bytes.length}`);
+}
